@@ -6,6 +6,8 @@ import javax.validation.ConstraintValidatorContext;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
+import com.paultamayo.ciudadano.excepcion.CedulaExcepcion;
+
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -16,7 +18,7 @@ public class CedulaEcuadorValidador implements ConstraintValidator<CedulaEcuador
 		return validar(cedula);
 	}
 
-	private static boolean algoritmoModulo10(String digitosIniciales, int digitoVerificador) throws Exception {
+	private static boolean algoritmoModulo10(String digitosIniciales, int digitoVerificador) throws CedulaExcepcion {
 		Integer[] arrayCoeficientes = new Integer[] { 2, 1, 2, 1, 2, 1, 2, 1, 2 };
 
 		Integer[] digitosInicialesTMP = new Integer[digitosIniciales.length()];
@@ -53,39 +55,39 @@ public class CedulaEcuadorValidador implements ConstraintValidator<CedulaEcuador
 		}
 
 		if (resultado != digitoVerificador) {
-			throw new Exception("La cédula no es válida.");
+			throw new CedulaExcepcion("La cédula no es válida.");
 		}
 
 		return true;
 	}
 
-	private static boolean validarInicial(String numero, int caracteres) throws Exception {
+	private static boolean validarInicial(String numero, int caracteres) throws CedulaExcepcion {
 		if (StringUtils.isEmpty(numero)) {
-			throw new Exception("La cédula que ha ingresado esta en blanco.");
+			throw new CedulaExcepcion("La cédula que ha ingresado esta en blanco.");
 		}
 
 		if (!NumberUtils.isDigits(numero)) {
-			throw new Exception("La cédula ingresada debe contener solo números.");
+			throw new CedulaExcepcion("La cédula ingresada debe contener solo números.");
 		}
 
 		if (numero.length() != caracteres) {
-			throw new Exception(String.format("La cédula ingresada debe tener %s caracteres.", caracteres));
+			throw new CedulaExcepcion(String.format("La cédula ingresada debe tener %s caracteres.", caracteres));
 		}
 
 		return true;
 	}
 
-	private static boolean validarTercerDigito(String numero, Integer tipo) throws Exception {
+	private static boolean validarTercerDigito(String numero, Integer tipo) throws CedulaExcepcion {
 		if (Integer.parseInt(numero) < 0 || Integer.parseInt(numero) > 5) {
-			throw new Exception("La cédula no corresponde a una cédula válida.");
+			throw new CedulaExcepcion("La cédula no corresponde a una cédula válida.");
 		}
 
 		return true;
 	}
 
-	private static boolean validarCodigoProvincia(String numero) throws Exception {
+	private static boolean validarCodigoProvincia(String numero) throws CedulaExcepcion {
 		if (Integer.parseInt(numero) < 0 || Integer.parseInt(numero) > 24) {
-			throw new Exception("El código de la provincia no se encuentra en el intervalo [1, 24].");
+			throw new CedulaExcepcion("El código de la provincia no se encuentra en el intervalo [1, 24].");
 		}
 
 		return true;
@@ -98,8 +100,8 @@ public class CedulaEcuadorValidador implements ConstraintValidator<CedulaEcuador
 			validarTercerDigito(String.valueOf(cedula.charAt(2)), 1);
 			algoritmoModulo10(cedula, Integer.parseInt(String.valueOf(cedula.charAt(9))));
 			return true;
-		} catch (Exception ex) {
-			log.error(ex.getMessage(), ex);
+		} catch (CedulaExcepcion ex) {
+			log.error(ex.getMessage());
 			return false;
 		}
 	}
