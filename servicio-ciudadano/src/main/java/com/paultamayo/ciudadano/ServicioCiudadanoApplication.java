@@ -1,4 +1,4 @@
-package com.paultamayo.ciudadano.serviciociudadano;
+package com.paultamayo.ciudadano;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

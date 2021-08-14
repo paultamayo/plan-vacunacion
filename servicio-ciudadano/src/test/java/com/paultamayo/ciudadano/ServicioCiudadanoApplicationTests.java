@@ -1,4 +1,4 @@
-package com.paultamayo.ciudadano.serviciociudadano;
+package com.paultamayo.ciudadano;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
