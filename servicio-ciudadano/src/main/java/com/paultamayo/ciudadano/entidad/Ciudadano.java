@@ -1,11 +1,20 @@
 package com.paultamayo.ciudadano.entidad;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.paultamayo.ciudadano.entidad.enumerador.EstadoCiudadanoEnum;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Positive;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.paultamayo.ciudadano.entidad.enumerador.EstadoCiudadanoEnum;
+import com.paultamayo.ciudadano.restricciones.CedulaEcuador;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,21 +24,33 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Ciudadano {
 
-  private String apellido;
+	private static final String SOLO_LETRAS_ESPACIOS = "^[a-zA-Z ]+$";
 
-  private String cedula;
+	@NotBlank
+	@Pattern(regexp = SOLO_LETRAS_ESPACIOS)
+	private String apellido;
 
-  private String correoElectronico;
+	@NotBlank
+	@CedulaEcuador
+	private String cedula;
 
-  @Enumerated(EnumType.STRING)
-  private EstadoCiudadanoEnum estado;
+	@Email
+	private String correoElectronico;
 
-  private LocalDate fechaNacimiento;
+	@Enumerated(EnumType.STRING)
+	private EstadoCiudadanoEnum estado;
 
-  @JsonIgnore
-  private LocalDateTime fechaRegistro;
+	@NotNull
+	private LocalDate fechaNacimiento;
 
-  private String nombre;
+	@JsonIgnore
+	private LocalDateTime fechaRegistro;
 
-  private Double peso;
+	@NotBlank
+	@Pattern(regexp = SOLO_LETRAS_ESPACIOS)
+	private String nombre;
+
+	@NotNull
+	@Positive
+	private Double peso;
 }
