@@ -15,21 +15,21 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Ciudadano {
 
-  private String nombre;
-
   private String apellido;
+
+  private String cedula;
 
   private String correoElectronico;
 
-  private String cedula;
+  @Enumerated(EnumType.STRING)
+  private EstadoCiudadanoEnum estado;
+
+  private LocalDate fechaNacimiento;
 
   @JsonIgnore
   private LocalDateTime fechaRegistro;
 
-  private LocalDate fechaNacimiento;
+  private String nombre;
 
   private Double peso;
-
-  @Enumerated(EnumType.STRING)
-  private EstadoCiudadanoEnum estado;
 }

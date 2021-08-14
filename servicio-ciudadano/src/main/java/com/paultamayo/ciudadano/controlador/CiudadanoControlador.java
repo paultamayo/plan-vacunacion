@@ -19,11 +19,6 @@ public class CiudadanoControlador {
   @Autowired
   private CiudadanoServicio servicio;
 
-  @GetMapping("/")
-  public String index() {
-    return "Servicios de Ciudadanos";
-  }
-
   @GetMapping("/todos")
   public ResponseEntity<List<Ciudadano>> buscarTodos() {
     return new ResponseEntity<>(servicio.buscarTodos(), HttpStatus.OK);
@@ -33,5 +28,10 @@ public class CiudadanoControlador {
   @PostMapping(path = "/crear", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Ciudadano> crear(@RequestBody Ciudadano ciudadano) {
     return new ResponseEntity<>(servicio.guardar(ciudadano), HttpStatus.OK);
+  }
+
+  @GetMapping("/")
+  public String index() {
+    return "Servicios de Ciudadanos";
   }
 }
