@@ -1,3 +1,5 @@
+logging:  file:    path: ./logs    name: ${logging.file.path}/servicio-ciudadano.log  logback:    rollingpolicy:            max-file-size: 100MB      max-history: 180      total-size-cap: 2GB        
+
 server:
   port: 8081
 
