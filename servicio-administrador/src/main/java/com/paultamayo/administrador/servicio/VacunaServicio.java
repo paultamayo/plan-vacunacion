@@ -1,5 +1,7 @@
 package com.paultamayo.administrador.servicio;
 
+import java.util.List;
+
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,11 @@ public class VacunaServicio extends BaseServicio<Vacuna, Long> {
 	@Autowired
 	private VacunaRepositorio repositorio;
 
+	@Transactional(propagation = Propagation.MANDATORY)
+	public void actualizar(Long id) {
+		repositorio.actualizar(id);
+	}
+
 	@Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = LogicaServicioExcepcion.class)
 	public Vacuna actualizar(Long id, Long cantidad) throws LogicaServicioExcepcion {
 		try {
@@ -38,6 +45,11 @@ public class VacunaServicio extends BaseServicio<Vacuna, Long> {
 			Throwable root = ExceptionUtils.getRootCause(ex);
 			throw new LogicaServicioExcepcion(root.getMessage());
 		}
+	}
+
+	@Transactional(propagation = Propagation.NOT_SUPPORTED)
+	public Vacuna buscarVacunaDisponible(List<Long> ids) {
+		return new Vacuna(10l, ids.get(0), "Vacuna");
 	}
 
 }

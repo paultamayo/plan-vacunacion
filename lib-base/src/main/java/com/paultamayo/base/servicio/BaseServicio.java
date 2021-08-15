@@ -11,13 +11,6 @@ import com.paultamayo.base.excepcion.LogicaServicioExcepcion;
 
 public abstract class BaseServicio<T, K> {
 
-	protected abstract CrudRepository<T, K> getRepositorio();
-
-	@Transactional(propagation = Propagation.NOT_SUPPORTED)
-	public Iterable<T> buscarTodos() {
-		return getRepositorio().findAll();
-	}
-
 	@Transactional(propagation = Propagation.NOT_SUPPORTED)
 	public T buscarPorId(K id) throws LogicaServicioExcepcion {
 		Optional<T> ciudadano = getRepositorio().findById(id);
@@ -29,8 +22,26 @@ public abstract class BaseServicio<T, K> {
 		return ciudadano.get();
 	}
 
+	@Transactional(propagation = Propagation.NOT_SUPPORTED)
+	public Iterable<T> buscarTodos() {
+		return getRepositorio().findAll();
+	}
+
+	protected abstract CrudRepository<T, K> getRepositorio();
+
 	@Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = LogicaServicioExcepcion.class)
 	public T guardar(T t) throws LogicaServicioExcepcion {
+		try {
+			return getRepositorio().save(t);
+		} catch (Exception ex) {
+			Throwable e = ExceptionUtils.getRootCause(ex);
+			throw new LogicaServicioExcepcion(
+					String.format("No se pudo guardar la información. Mensaje[%s]", e.getMessage()), ex);
+		}
+	}
+
+	@Transactional(propagation = Propagation.MANDATORY, rollbackFor = LogicaServicioExcepcion.class)
+	public T guardarMandatory(T t) throws LogicaServicioExcepcion {
 		try {
 			return getRepositorio().save(t);
 		} catch (Exception ex) {

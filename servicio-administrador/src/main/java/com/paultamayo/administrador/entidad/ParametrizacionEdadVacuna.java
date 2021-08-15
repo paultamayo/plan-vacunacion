@@ -11,10 +11,14 @@ import javax.persistence.Table;
 
 import com.paultamayo.base.enumerador.ActivoEnum;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@AllArgsConstructor
 @Data
 @Entity
+@NoArgsConstructor
 @Table(name = "param_edad_vacuna")
 public class ParametrizacionEdadVacuna {
 

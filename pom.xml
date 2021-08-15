@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.paultamayo.root</groupId>
+    <artifactId>root-vacunacion</artifactId>
+    <version>1.0.0</version>
+
+    <packaging>pom</packaging>
+
+
+    <developers>
+        <developer>
+            <id>ptamayo</id>
+            <name>Paul Tamayo</name>
+            <email>dpaul.tamayo@gmail.com</email>
+        </developer>
+    </developers>
+
+
+    <modules>
+        <module>lib-base</module>
+        <module>servicio-administrador</module>
+        <module>servicio-ciudadano</module>
+    </modules>
+
+</project>

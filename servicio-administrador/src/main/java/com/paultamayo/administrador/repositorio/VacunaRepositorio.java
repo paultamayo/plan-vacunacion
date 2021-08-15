@@ -11,6 +11,10 @@ import com.paultamayo.administrador.entidad.Vacuna;
 public interface VacunaRepositorio extends CrudRepository<Vacuna, Long> {
 
 	@Modifying
+	@Query("UPDATE Vacuna v SET v.cantidad = v.cantidad -1 WHERE v.id = :id")
+	void actualizar(Long id);
+
+	@Modifying
 	@Query("UPDATE Vacuna v SET v.cantidad = :cantidad WHERE v.id = :id")
 	void actualizar(Long id, Long cantidad);
 }

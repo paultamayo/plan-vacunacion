@@ -1,5 +1,6 @@
 package com.paultamayo.administrador.entidad;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
@@ -22,7 +23,7 @@ public class AsignacionVacuna {
 
 	private LocalDateTime fechaProgramada;
 
-	private LocalDateTime fechaRegistro;
+	private LocalDate fechaRegistro;
 
 	@Id
 	private Long vacunaId;
