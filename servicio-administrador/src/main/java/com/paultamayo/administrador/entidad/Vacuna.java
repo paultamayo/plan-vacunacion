@@ -7,22 +7,24 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@AllArgsConstructor
 @Data
 @Entity
+@NoArgsConstructor
 public class Vacuna implements Serializable {
 
 	private static final long serialVersionUID = 7024412285467381859L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@JsonIgnore
 	private Long id;
 
 	private String nombre;
 
 	private Long cantidad;
+
 }
