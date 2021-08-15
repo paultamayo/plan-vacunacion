@@ -31,6 +31,7 @@ public class CiudadanoServicio extends BaseServicio<Ciudadano, String> {
 		return repositorio.findByEstado(estado);
 	}
 
+	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW, noRollbackFor = LogicaServicioExcepcion.class)
 	public Ciudadano guardar(Ciudadano ciudadano) throws LogicaServicioExcepcion {
 		try {

@@ -4,19 +4,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,7 +26,7 @@ import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-@RestController
+@RestController("Ciudadano")
 public class CiudadanoControlador extends BaseControlador<Ciudadano, String> {
 
 	@Getter(value = AccessLevel.PROTECTED)
@@ -55,18 +49,6 @@ public class CiudadanoControlador extends BaseControlador<Ciudadano, String> {
 		try {
 			List<Ciudadano> listado = servicio.buscarPorEstado(estado);
 			return new ResponseEntity<>(new RespuestaTo<>(EstadoRespuestaEnum.OK, null, listado), HttpStatus.OK);
-		} catch (Exception ex) {
-			log.error(ex.getMessage(), ex);
-			return responderError(ex);
-		}
-	}
-
-	@ResponseBody
-	@PostMapping(path = "/crear", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<RespuestaTo<Ciudadano>> crear(@RequestBody @Valid Ciudadano ciudadano) {
-		try {
-			return new ResponseEntity<>(new RespuestaTo<>(EstadoRespuestaEnum.OK, null, servicio.guardar(ciudadano)),
-					HttpStatus.OK);
 		} catch (Exception ex) {
 			log.error(ex.getMessage(), ex);
 			return responderError(ex);

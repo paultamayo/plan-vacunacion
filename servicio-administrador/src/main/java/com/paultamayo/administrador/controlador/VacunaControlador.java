@@ -18,7 +18,7 @@ import com.paultamayo.base.controlador.BaseControlador;
 import lombok.AccessLevel;
 import lombok.Getter;
 
-@RestController
+@RestController("Vacuna")
 public class VacunaControlador extends BaseControlador<Vacuna, Long> {
 
 	@Getter(value = AccessLevel.PROTECTED)
