@@ -1,4 +1,4 @@
-package com.paultamayo.ciudadano.excepcion;
+package com.paultamayo.base.excepcion;
 
 public class LogicaServicioExcepcion extends Exception {
 

@@ -20,23 +20,22 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.paultamayo.base.controlador.BaseControlador;
+import com.paultamayo.base.enumerador.EstadoRespuestaEnum;
+import com.paultamayo.base.to.RespuestaTo;
 import com.paultamayo.ciudadano.entidad.Ciudadano;
 import com.paultamayo.ciudadano.enumerador.EstadoCiudadanoEnum;
-import com.paultamayo.ciudadano.enumerador.EstadoRespuestaEnum;
 import com.paultamayo.ciudadano.servicios.CiudadanoServicio;
-import com.paultamayo.ciudadano.to.RespuestaTo;
 
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 @RestController
-public class CiudadanoControlador {
+public class CiudadanoControlador extends BaseControlador<Ciudadano, String> {
 
-	private static <T> ResponseEntity<RespuestaTo<T>> responderError(Exception ex) {
-		return new ResponseEntity<>(new RespuestaTo<>(EstadoRespuestaEnum.ERROR, ex.getMessage(), null),
-				HttpStatus.INTERNAL_SERVER_ERROR);
-	}
-
+	@Getter(value = AccessLevel.PROTECTED)
 	@Autowired
 	private CiudadanoServicio servicio;
 
@@ -45,17 +44,6 @@ public class CiudadanoControlador {
 		try {
 			return new ResponseEntity<>(new RespuestaTo<>(EstadoRespuestaEnum.OK, null, servicio.buscarPorId(cedula)),
 					HttpStatus.OK);
-		} catch (Exception ex) {
-			log.error(ex.getMessage(), ex);
-			return responderError(ex);
-		}
-	}
-
-	@GetMapping("/todos")
-	public ResponseEntity<RespuestaTo<Iterable<Ciudadano>>> buscarTodos() {
-		try {
-			Iterable<Ciudadano> listado = servicio.buscarTodos();
-			return new ResponseEntity<>(new RespuestaTo<>(EstadoRespuestaEnum.OK, null, listado), HttpStatus.OK);
 		} catch (Exception ex) {
 			log.error(ex.getMessage(), ex);
 			return responderError(ex);
@@ -83,11 +71,6 @@ public class CiudadanoControlador {
 			log.error(ex.getMessage(), ex);
 			return responderError(ex);
 		}
-	}
-
-	@GetMapping("/")
-	public String index() {
-		return "Servicios de Ciudadanos";
 	}
 
 	@ResponseStatus(HttpStatus.BAD_REQUEST)

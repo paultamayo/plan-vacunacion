@@ -1,8 +1,8 @@
-package com.paultamayo.ciudadano.to;
+package com.paultamayo.base.to;
 
 import java.io.Serializable;
 
-import com.paultamayo.ciudadano.enumerador.EstadoRespuestaEnum;
+import com.paultamayo.base.enumerador.EstadoRespuestaEnum;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

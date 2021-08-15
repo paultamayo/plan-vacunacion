@@ -1,0 +1,27 @@
+logging:
+  file:
+    path: ./logs
+    name: ${logging.file.path}/servicio-administracion.log
+  logback:
+    rollingpolicy:      
+      max-file-size: 100MB
+      max-history: 180
+      total-size-cap: 2GB
+
+server:
+  port: 8082
+
+spring:
+    application:
+        name: servicio-administracion
+    datasource:
+        driver-class-name: org.postgresql.Driver
+        url: jdbc:postgresql://192.168.1.115:5432/krugerdb
+        username: demo
+        password: demo
+    jpa:
+        database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+springdoc:
+    api-docs:
+        path: /api-docs
