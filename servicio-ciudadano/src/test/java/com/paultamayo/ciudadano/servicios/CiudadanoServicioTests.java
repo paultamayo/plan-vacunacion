@@ -40,7 +40,6 @@ class CiudadanoServicioTests {
 		ciudadano.setFechaNacimiento(LocalDate.now());
 		ciudadano.setFechaRegistro(LocalDateTime.now());
 		ciudadano.setNombre("Nombre de Prueba");
-		ciudadano.setPeso(55.0);
 
 		when(repositorio.findById(cedula)).thenReturn(Optional.of(ciudadano));
 

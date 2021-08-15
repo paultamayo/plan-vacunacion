@@ -1,25 +1,17 @@
 package com.paultamayo.administrador.entidad;
 
-import java.io.Serializable;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
 @Data
 @Entity
-@NoArgsConstructor
-public class Vacuna implements Serializable {
-
-	private static final long serialVersionUID = 7024412285467381859L;
-
-	private Long cantidad;
+@Table(name = "param_tipo_enfermedad")
+public class ParametrizacionTipoEnfermedad {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,4 +19,5 @@ public class Vacuna implements Serializable {
 
 	private String nombre;
 
+	private Integer valor;
 }

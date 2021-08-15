@@ -30,7 +30,7 @@ public class VacunaServicio extends BaseServicio<Vacuna, Long> {
 
 				repositorio.actualizar(id, total);
 
-				return new Vacuna(null, vacuna.getNombre(), total);
+				return new Vacuna(total, null, vacuna.getNombre());
 			} else {
 				throw new Exception("No se puede agregar al stock de vacunas 0 o menos.");
 			}

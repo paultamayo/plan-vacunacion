@@ -61,7 +61,8 @@ public class Ciudadano {
 	@Pattern(regexp = SOLO_LETRAS_ESPACIOS)
 	private String nombre;
 
+	@Column(name = "tipo_enfermedad_id")
 	@NotNull
 	@Positive
-	private Double peso;
+	private Long tipoEnfermedadId;
 }
