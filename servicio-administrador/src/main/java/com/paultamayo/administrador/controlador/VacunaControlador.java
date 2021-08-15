@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.paultamayo.administrador.entidad.Vacuna;
 import com.paultamayo.administrador.servicio.VacunaServicio;
 import com.paultamayo.administrador.to.VacunaParametroTo;
+import com.paultamayo.administrador.to.VacunaTo;
 import com.paultamayo.base.controlador.BaseControlador;
 import com.paultamayo.base.enumerador.EstadoRespuestaEnum;
 import com.paultamayo.base.to.RespuestaTo;
@@ -39,10 +41,25 @@ public class VacunaControlador extends BaseControlador<Vacuna, Long> {
 
 	@ResponseBody
 	@PostMapping(path = "/modificar", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<RespuestaTo<Vacuna>> modificarInventario(@RequestBody @Valid  VacunaParametroTo param) {
+	public ResponseEntity<RespuestaTo<Vacuna>> modificarInventario(@RequestBody @Valid VacunaParametroTo param) {
 		try {
 			return new ResponseEntity<>(new RespuestaTo<>(EstadoRespuestaEnum.OK, null,
 					servicio.actualizar(param.getVacunaId(), param.getCantidad())), HttpStatus.OK);
+		} catch (Exception ex) {
+			log.error(ex.getMessage(), ex);
+			return responderError(ex);
+		}
+	}
+
+	@ResponseBody
+	@PostMapping(path = "/crear", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<RespuestaTo<Vacuna>> crear(@RequestBody @Valid VacunaTo vacunaTo) {
+		try {
+			Vacuna vacuna = new Vacuna();
+			BeanUtils.copyProperties(vacunaTo, vacuna);
+
+			return new ResponseEntity<>(new RespuestaTo<>(EstadoRespuestaEnum.OK, null, getServicio().guardar(vacuna)),
+					HttpStatus.OK);
 		} catch (Exception ex) {
 			log.error(ex.getMessage(), ex);
 			return responderError(ex);
