@@ -1,6 +1,7 @@
 package com.paultamayo.ciudadano.servicios;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityExistsException;
@@ -20,6 +21,11 @@ public class CiudadanoServicio {
 
 	@Autowired
 	private CiudadanoRepositorio repositorio;
+	
+	@Transactional(propagation = Propagation.NOT_SUPPORTED)
+	public List<Ciudadano> buscarPorEstado(EstadoCiudadanoEnum estado) {
+		return repositorio.findByEstado(estado);
+	}
 
 	@Transactional(propagation = Propagation.NOT_SUPPORTED)
 	public Ciudadano buscarPorId(String cedula) throws LogicaServicioExcepcion {

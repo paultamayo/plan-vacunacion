@@ -1,6 +1,7 @@
 package com.paultamayo.ciudadano.controlador;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.paultamayo.ciudadano.entidad.Ciudadano;
+import com.paultamayo.ciudadano.enumerador.EstadoCiudadanoEnum;
 import com.paultamayo.ciudadano.enumerador.EstadoRespuestaEnum;
 import com.paultamayo.ciudadano.servicios.CiudadanoServicio;
 import com.paultamayo.ciudadano.to.RespuestaTo;
@@ -51,9 +53,19 @@ public class CiudadanoControlador {
 
 	@GetMapping("/todos")
 	public ResponseEntity<RespuestaTo<Iterable<Ciudadano>>> buscarTodos() {
-		Iterable<Ciudadano> listado = null;
 		try {
-			listado = servicio.buscarTodos();
+			Iterable<Ciudadano> listado = servicio.buscarTodos();
+			return new ResponseEntity<>(new RespuestaTo<>(EstadoRespuestaEnum.OK, null, listado), HttpStatus.OK);
+		} catch (Exception ex) {
+			log.error(ex.getMessage(), ex);
+			return responderError(ex);
+		}
+	}
+
+	@GetMapping("/buscar/{estado}")
+	public ResponseEntity<RespuestaTo<List<Ciudadano>>> buscarPorEstados(EstadoCiudadanoEnum estado) {
+		try {
+			List<Ciudadano> listado = servicio.buscarPorEstado(estado);
 			return new ResponseEntity<>(new RespuestaTo<>(EstadoRespuestaEnum.OK, null, listado), HttpStatus.OK);
 		} catch (Exception ex) {
 			log.error(ex.getMessage(), ex);
