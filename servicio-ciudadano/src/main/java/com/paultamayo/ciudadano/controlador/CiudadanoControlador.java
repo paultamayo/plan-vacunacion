@@ -21,10 +21,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.paultamayo.base.controlador.BaseControlador;
+import com.paultamayo.base.enumerador.EstadoCiudadanoEnum;
 import com.paultamayo.base.enumerador.EstadoRespuestaEnum;
 import com.paultamayo.base.to.RespuestaTo;
 import com.paultamayo.ciudadano.entidad.Ciudadano;
-import com.paultamayo.ciudadano.enumerador.EstadoCiudadanoEnum;
 import com.paultamayo.ciudadano.servicios.CiudadanoServicio;
 
 import lombok.AccessLevel;

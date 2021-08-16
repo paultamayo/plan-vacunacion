@@ -1,7 +1,9 @@
 package com.paultamayo.administrador.servicio;
 
+import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,13 +29,19 @@ public class AsignacionVacunaServicio extends BaseServicio<AsignacionVacuna, Asi
 
 	@Transactional(propagation = Propagation.NOT_SUPPORTED)
 	public AsignacionFechaTo buscarAsignacion() {
-		Optional<AsignacionFechaTo> asignacion = repositorio.buscarAsignacion();
+		AsignacionFechaTo asignacion = new AsignacionFechaTo(0, LocalDate.of(2021, Month.AUGUST, 1));
+		Optional<Object[]> asignacionObject = repositorio.buscarAsignacion();
 
-		if (asignacion.isEmpty()) {
-			asignacion = Optional.of(new AsignacionFechaTo(0, LocalDate.of(2021, Month.AUGUST, 1)));
+		if (asignacionObject.isPresent() && asignacionObject.get().length == 1) {
+			Object[] obj = (Object[]) asignacionObject.get()[0];
+			Date fecha = (Date) obj[0];
+			BigInteger cantidad = (BigInteger) obj[1];
+
+			asignacion.setFecha(new java.sql.Date(fecha.getTime()).toLocalDate());
+			asignacion.setCantidad(cantidad.intValue());
 		}
 
-		return asignacion.get();
+		return asignacion;
 	}
 
 }

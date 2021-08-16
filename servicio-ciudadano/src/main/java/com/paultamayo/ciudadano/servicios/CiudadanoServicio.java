@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.paultamayo.base.enumerador.EstadoCiudadanoEnum;
 import com.paultamayo.base.excepcion.LogicaServicioExcepcion;
 import com.paultamayo.base.servicio.BaseServicio;
 import com.paultamayo.ciudadano.entidad.Ciudadano;
-import com.paultamayo.ciudadano.enumerador.EstadoCiudadanoEnum;
 import com.paultamayo.ciudadano.repositorio.CiudadanoRepositorio;
 
 import lombok.AccessLevel;

@@ -20,7 +20,9 @@ spring:
         username: demo
         password: demo
     jpa:
-        database-platform: org.hibernate.dialect.PostgreSQLDialect
+        database-platform: org.hibernate.dialect.PostgreSQL94Dialect        properties:
+          hibernate:
+            show_sql: false        
 
 springdoc:
     api-docs:

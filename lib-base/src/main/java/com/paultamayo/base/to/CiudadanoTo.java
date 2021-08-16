@@ -1,5 +1,8 @@
 package com.paultamayo.base.to;
 
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import lombok.Data;
@@ -10,7 +13,9 @@ import lombok.RequiredArgsConstructor;
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
-public class CiudadanoTo {
+public class CiudadanoTo implements Serializable {
+
+	private static final long serialVersionUID = 6608791361515360088L;
 
 	private boolean asignado;
 
@@ -18,7 +23,7 @@ public class CiudadanoTo {
 	private String cedula;
 
 	@NonNull
-	private Integer edad;
+	private LocalDate fechaNacimiento;
 
 	private boolean programado;
 
@@ -33,4 +38,8 @@ public class CiudadanoTo {
 	private Long tipoEnfermedadId;
 
 	private List<Long> vacunasId;
+
+	public Long getEdad() {
+		return ChronoUnit.YEARS.between(fechaNacimiento, LocalDate.now());
+	}
 }

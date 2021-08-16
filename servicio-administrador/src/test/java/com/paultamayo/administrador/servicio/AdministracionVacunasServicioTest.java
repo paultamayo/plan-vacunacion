@@ -15,9 +15,9 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.google.common.collect.Lists;
 import com.paultamayo.administrador.entidad.AsignacionVacuna;
 import com.paultamayo.administrador.entidad.ParametrizacionEdadPeso;
 import com.paultamayo.administrador.entidad.ParametrizacionEdadVacuna;
@@ -37,6 +37,9 @@ class AdministracionVacunasServicioTest {
 
 	@Mock
 	private AsignacionVacunaServicio asignacionServicio;
+
+	@Autowired
+	private CiudadanoServicio ciudadanoServicio;
 
 	@Mock
 	private ParametrizacionEdadPesoServicio edadServicio;
@@ -66,43 +69,39 @@ class AdministracionVacunasServicioTest {
 		Vacuna vacuna = new Vacuna();
 		vacuna.setCantidad(10l);
 		when(vacunaServicio.buscarVacunaDisponible(Mockito.any())).thenReturn(vacuna);
-		when(vacunaServicio.guardarMandatory(Mockito.any())).thenReturn(vacuna);
+		when(vacunaServicio.guardarRequerida(Mockito.any())).thenReturn(vacuna);
 
-		CiudadanoTo c0 = new CiudadanoTo("0000000000", 15, 1l, 3l);
+		LocalDate fechaNacimientoHoy = LocalDate.now();
+
+		CiudadanoTo c0 = new CiudadanoTo("0000000000", fechaNacimientoHoy.minusYears(15), 1l, 3l);
 		CiudadanoTo a0 = administracion.asignarPesoVacunas(c0);
 		assertThat(a0.getPeso()).isEqualTo(-1);
 		assertThat(a0.isAsignado()).isFalse();
 		assertThat(a0.getVacunasId()).isNull();
 
-		CiudadanoTo c1 = new CiudadanoTo("0000000001", 23, 2l, 3l);
+		CiudadanoTo c1 = new CiudadanoTo("0000000001", fechaNacimientoHoy.minusYears(23), 2l, 3l);
 		CiudadanoTo a1 = administracion.asignarPesoVacunas(c1);
 		assertThat(a1.getPeso()).isEqualTo(5);
 		assertThat(a1.getVacunasId()).contains(1l, 2l);
 		assertThat(a1.isAsignado()).isTrue();
 
-		CiudadanoTo c2 = new CiudadanoTo("0000000002", 35, 3l, 2l);
+		CiudadanoTo c2 = new CiudadanoTo("0000000002", fechaNacimientoHoy.minusYears(35), 3l, 2l);
 		CiudadanoTo a2 = administracion.asignarPesoVacunas(c2);
 		assertThat(a2.getPeso()).isEqualTo(5);
 		assertThat(a2.getVacunasId()).contains(2l, 3l);
 		assertThat(a2.isAsignado()).isTrue();
 
-		CiudadanoTo c3 = new CiudadanoTo("0000000003", 48, 4l, 1l);
+		CiudadanoTo c3 = new CiudadanoTo("0000000003", fechaNacimientoHoy.minusYears(48), 4l, 1l);
 		CiudadanoTo a3 = administracion.asignarPesoVacunas(c3);
 		assertThat(a3.getPeso()).isEqualTo(5);
 		assertThat(a3.getVacunasId()).contains(3l, 4l);
 		assertThat(a3.isAsignado()).isTrue();
 
-		CiudadanoTo c4 = new CiudadanoTo("0000000004", 68, 5l, 3l);
+		CiudadanoTo c4 = new CiudadanoTo("0000000004", fechaNacimientoHoy.minusYears(68), 5l, 3l);
 		CiudadanoTo a4 = administracion.asignarPesoVacunas(c4);
 		assertThat(a4.getPeso()).isEqualTo(2);
 		assertThat(a4.getVacunasId()).contains(5l);
 		assertThat(a4.isAsignado()).isTrue();
-
-		List<CiudadanoTo> asignados = Lists.newArrayList(c0, c1, c2, c3, c4);
-		administracion.asignarPrioridadVacunas(asignados);
-
-		assertThat(a0.isProgramado()).isFalse();
-		assertThat(a4.isProgramado()).isTrue();
 	}
 
 	@BeforeAll

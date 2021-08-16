@@ -40,8 +40,8 @@ public abstract class BaseServicio<T, K> {
 		}
 	}
 
-	@Transactional(propagation = Propagation.MANDATORY, rollbackFor = LogicaServicioExcepcion.class)
-	public T guardarMandatory(T t) throws LogicaServicioExcepcion {
+	@Transactional(rollbackFor = LogicaServicioExcepcion.class)
+	public T guardarRequerida(T t) throws LogicaServicioExcepcion {
 		try {
 			return getRepositorio().save(t);
 		} catch (Exception ex) {

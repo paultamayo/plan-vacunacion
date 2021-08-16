@@ -1,4 +1,4 @@
-package com.paultamayo.ciudadano.enumerador;
+package com.paultamayo.base.enumerador;
 
 public enum EstadoCiudadanoEnum {
 	PENDIENTE, PROGRAMADO,

@@ -1,7 +1,7 @@
 package com.paultamayo.administrador.servicio;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -24,6 +24,7 @@ import com.paultamayo.administrador.entidad.ParametrizacionTipoEnfermedad;
 import com.paultamayo.administrador.entidad.Vacuna;
 import com.paultamayo.administrador.to.AsignacionFechaTo;
 import com.paultamayo.base.enumerador.ActivoEnum;
+import com.paultamayo.base.enumerador.EstadoCiudadanoEnum;
 import com.paultamayo.base.excepcion.LogicaServicioExcepcion;
 import com.paultamayo.base.to.CiudadanoTo;
 
@@ -35,6 +36,9 @@ public class AdministracionVacunasServicio {
 
 	@Autowired
 	private AsignacionVacunaServicio asignacionVacunaServicio;
+
+	@Autowired
+	private CiudadanoServicio ciudadanoServicio;
 
 	private List<ParametrizacionEdadPeso> edadPesos;
 
@@ -62,7 +66,7 @@ public class AdministracionVacunasServicio {
 					&& ciudadano.getEdad() >= ep.getMinimo();
 			Predicate<ParametrizacionEdadPeso> e2 = ep -> Objects.nonNull(ep.getMaximo())
 					&& ciudadano.getEdad() >= ep.getMinimo() && ciudadano.getEdad() <= ep.getMaximo();
-			ParametrizacionEdadPeso edadPeso = edadPesos.parallelStream().filter(e1.or(e2)).findFirst().orElseThrow(
+			ParametrizacionEdadPeso edadPeso = edadPesos.stream().filter(e1.or(e2)).findFirst().orElseThrow(
 					() -> new Exception("No se pudo identificar el rango del tipo de enfermedad para la cedula: "
 							+ ciudadano.getCedula()));
 
@@ -70,10 +74,10 @@ public class AdministracionVacunasServicio {
 					&& ciudadano.getEdad() >= ep.getMinimo();
 			Predicate<ParametrizacionEdadVacuna> p4 = ep -> Objects.nonNull(ep.getMaximo())
 					&& ciudadano.getEdad() >= ep.getMinimo() && ciudadano.getEdad() <= ep.getMaximo();
-			List<ParametrizacionEdadVacuna> edadVacunasDisponibles = edadVacunas.parallelStream().filter(p3.or(p4))
+			List<ParametrizacionEdadVacuna> edadVacunasDisponibles = edadVacunas.stream().filter(p3.or(p4))
 					.collect(Collectors.toList());
 
-			ParametrizacionTipoEnfermedad tipoEnfermedad = tipoEnfermedades.parallelStream()
+			ParametrizacionTipoEnfermedad tipoEnfermedad = tipoEnfermedades.stream()
 					.filter(te -> te.getId().compareTo(ciudadano.getTipoEnfermedadId()) == 0).findFirst()
 					.orElseThrow(() -> new Exception(
 							"No existe un tipo de enfermedad para la cedula: " + ciudadano.getCedula()));
@@ -83,7 +87,7 @@ public class AdministracionVacunasServicio {
 
 			ciudadano.setAsignado(true);
 			ciudadano.setPeso(edadPeso.getValor() + tipoEnfermedad.getValor());
-			ciudadano.setVacunasId(edadVacunasDisponibles.parallelStream().map(ParametrizacionEdadVacuna::getVacunaId)
+			ciudadano.setVacunasId(edadVacunasDisponibles.stream().map(ParametrizacionEdadVacuna::getVacunaId)
 					.collect(Collectors.toList()));
 		} catch (Exception e) {
 			Throwable root = ExceptionUtils.getRootCause(e);
@@ -95,12 +99,12 @@ public class AdministracionVacunasServicio {
 	}
 
 	@Transactional(propagation = Propagation.NOT_SUPPORTED)
-	public List<CiudadanoTo> asignarPrioridadVacunas(List<CiudadanoTo> ciudadanos) throws LogicaServicioExcepcion {
+	public List<CiudadanoTo> asignarPrioridadVacunas() throws LogicaServicioExcepcion {
 		if ((Objects.isNull(edadPesos) || edadPesos.isEmpty()) || (Objects.isNull(edadVacunas) || edadVacunas.isEmpty())
 				|| (Objects.isNull(tipoEnfermedades) || tipoEnfermedades.isEmpty())) {
 			throw new LogicaServicioExcepcion("No se han cargado correctamente los parámetros de asignación.");
 		}
-
+		List<CiudadanoTo> ciudadanos = ciudadanoServicio.buscarPorEstado(EstadoCiudadanoEnum.PENDIENTE);
 		ciudadanos.forEach(this::asignarPesoVacunas);
 		ciudadanos.sort(Comparator.comparing(CiudadanoTo::getPeso).thenComparing(CiudadanoTo::getPrioridad));
 
@@ -120,30 +124,26 @@ public class AdministracionVacunasServicio {
 	@Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = LogicaServicioExcepcion.class)
 	public void guardarCiudadanoAsignado(CiudadanoTo ciudadano) throws LogicaServicioExcepcion {
 		try {
-			// Buscar vacuna para asignar
 			Vacuna vacuna = vacunaServicio.buscarVacunaDisponible(ciudadano.getVacunasId());
 			long stockVacuna = vacuna.getCantidad() - 1;
 			if (stockVacuna < 0) {
 				throw new Exception("No hay stock de vacunas");
 			}
+			vacunaServicio.actualizarSinValidacion(vacuna.getId(), stockVacuna);
 
-			// Buscar fecha_programada
 			AsignacionFechaTo asignacionFecha = asignacionVacunaServicio.buscarAsignacion();
-			LocalDate fechaProgramada = asignacionFecha.getCantidad() <= 5 ? asignacionFecha.getFecha()
+			LocalDate fechaProgramada = asignacionFecha.getCantidad() < 5 ? asignacionFecha.getFecha()
 					: asignacionFecha.getFecha().plusDays(1);
-			// Cambiar estado ciudadano
 
-			// Registrar asignacion_vacuna
+			ciudadanoServicio.actualizar(ciudadano.getCedula(), EstadoCiudadanoEnum.PROGRAMADO);
+
 			AsignacionVacuna asignacion = new AsignacionVacuna();
 			asignacion.setCiudadanoId(ciudadano.getCedula());
 			asignacion.setVacunaId(vacuna.getId());
-			asignacion.setFechaProgramada(fechaProgramada.atTime(LocalTime.now()));
-			asignacion.setFechaRegistro(LocalDate.now());
+			asignacion.setFechaProgramada(fechaProgramada);
+			asignacion.setFechaRegistro(LocalDateTime.now());
+			asignacionVacunaServicio.guardarRequerida(asignacion);
 
-			asignacionVacunaServicio.guardar(asignacion);
-
-			vacuna.setCantidad(stockVacuna);
-			vacunaServicio.guardarMandatory(vacuna);
 			ciudadano.setProgramado(true);
 		} catch (Exception ex) {
 			Throwable root = ExceptionUtils.getRootCause(ex);
@@ -154,7 +154,6 @@ public class AdministracionVacunasServicio {
 
 	@PostConstruct
 	public void init() {
-		log.info("Cargando datos");
 		try {
 			edadPesos = edadPesoServicio.buscarPorActivo(ActivoEnum.SI);
 			edadVacunas = edadVacunaServicio.buscarPorActivo(ActivoEnum.SI);

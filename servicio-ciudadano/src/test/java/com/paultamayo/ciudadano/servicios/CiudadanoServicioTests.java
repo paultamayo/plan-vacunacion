@@ -14,9 +14,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.paultamayo.base.enumerador.EstadoCiudadanoEnum;
 import com.paultamayo.base.excepcion.LogicaServicioExcepcion;
 import com.paultamayo.ciudadano.entidad.Ciudadano;
-import com.paultamayo.ciudadano.enumerador.EstadoCiudadanoEnum;
 import com.paultamayo.ciudadano.repositorio.CiudadanoRepositorio;
 
 @SpringBootTest

@@ -1,4 +1,4 @@
-package com.paultamayo.ciudadano.entidad;
+package com.paultamayo.administrador.entidad;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -17,7 +17,6 @@ import javax.validation.constraints.Positive;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.paultamayo.base.enumerador.EstadoCiudadanoEnum;
-import com.paultamayo.ciudadano.restricciones.CedulaEcuador;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -37,7 +36,6 @@ public class Ciudadano {
 
 	@Id
 	@NotBlank
-	@CedulaEcuador
 	private String cedula;
 
 	@Column(name = "correo_electronico")

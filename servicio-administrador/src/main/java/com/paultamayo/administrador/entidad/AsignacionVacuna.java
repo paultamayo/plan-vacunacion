@@ -21,9 +21,9 @@ public class AsignacionVacuna {
 	@Id
 	private String ciudadanoId;
 
-	private LocalDateTime fechaProgramada;
+	private LocalDate fechaProgramada;
 
-	private LocalDate fechaRegistro;
+	private LocalDateTime fechaRegistro;
 
 	@Id
 	private Long vacunaId;

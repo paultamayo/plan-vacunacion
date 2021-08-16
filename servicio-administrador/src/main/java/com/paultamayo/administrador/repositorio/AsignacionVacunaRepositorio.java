@@ -8,13 +8,12 @@ import org.springframework.stereotype.Repository;
 
 import com.paultamayo.administrador.entidad.AsignacionVacuna;
 import com.paultamayo.administrador.entidad.ids.AsignacionVacunaID;
-import com.paultamayo.administrador.to.AsignacionFechaTo;
 
 @Repository
 public interface AsignacionVacunaRepositorio extends CrudRepository<AsignacionVacuna, AsignacionVacunaID> {
 
-	@Query(value = "select NEW com.paultamayo.administrador.to.AsignacionFechaTo(count(1), fecha_registro::date) from asignacion_vacuna av "
-			+ "where fecha_registro::date = (select max(fecha_registro::date) from asignacion_vacuna av) "
-			+ "group by fecha_registro::date", nativeQuery = true)
-	Optional<AsignacionFechaTo> buscarAsignacion();
+	@Query(value = "select fecha_programada\\:\\:date, count(1) from asignacion_vacuna av "
+			+ "where fecha_programada\\:\\:date = (select max(fecha_programada\\:\\:date) from asignacion_vacuna av) "
+			+ "group by fecha_programada\\:\\:date;", nativeQuery = true)
+	Optional<Object[]> buscarAsignacion();
 }

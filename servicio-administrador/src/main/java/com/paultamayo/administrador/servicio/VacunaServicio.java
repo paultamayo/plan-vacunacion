@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.collect.Lists;
 import com.paultamayo.administrador.entidad.Vacuna;
 import com.paultamayo.administrador.repositorio.VacunaRepositorio;
 import com.paultamayo.base.excepcion.LogicaServicioExcepcion;
@@ -47,9 +48,20 @@ public class VacunaServicio extends BaseServicio<Vacuna, Long> {
 		}
 	}
 
+	@Transactional
+	public void actualizarSinValidacion(Long id, Long cantidad) throws LogicaServicioExcepcion {
+		try {
+			repositorio.actualizar(id, cantidad);
+		} catch (Exception ex) {
+			Throwable root = ExceptionUtils.getRootCause(ex);
+			throw new LogicaServicioExcepcion(root.getMessage());
+		}
+	}
+
 	@Transactional(propagation = Propagation.NOT_SUPPORTED)
-	public Vacuna buscarVacunaDisponible(List<Long> ids) {
-		return new Vacuna(10l, ids.get(0), "Vacuna");
+	public Vacuna buscarVacunaDisponible(List<Long> ids) throws LogicaServicioExcepcion {
+		return Lists.newArrayList(repositorio.findAllById(ids)).stream().filter(v -> v.getCantidad() > 0).findAny()
+				.orElseThrow(() -> new LogicaServicioExcepcion("No existe stock con las vacunas con códigos: " + ids));
 	}
 
 }
