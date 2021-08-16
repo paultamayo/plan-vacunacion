@@ -1,0 +1,1 @@
+java -jar servidor-zuul/target/servidor-zuul.jar

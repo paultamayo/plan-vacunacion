@@ -43,5 +43,7 @@ public class CiudadanoServicio extends BaseServicio<Ciudadano, String> {
 	public void actualizar(String cedula, EstadoCiudadanoEnum estado) {
 		repositorio.actualizar(cedula, estado);
 	}
+	
+	
 
 }

@@ -1,0 +1,1 @@
+java -jar servidor-eureka/target/servidor-eureka-0.0.1-SNAPSHOT.jar
