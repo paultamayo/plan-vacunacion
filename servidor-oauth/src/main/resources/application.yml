@@ -9,7 +9,7 @@ eureka:
 logging:
   file:
     path: ./logs
-    name: ${logging.file.path}/servicio-administracion.log
+    name: ${logging.file.path}/servidor-oauth.log
   logback:
     rollingpolicy:      
       max-file-size: 100MB
@@ -21,7 +21,7 @@ server:
 
 spring:
     application:
-        name: servicio-administrador
+        name: servidor-oauth
     datasource:
         driver-class-name: org.postgresql.Driver
         url: jdbc:postgresql://192.168.1.115:5432/krugerdb
@@ -30,8 +30,4 @@ spring:
     jpa:
         database-platform: org.hibernate.dialect.PostgreSQL94Dialect        properties:
           hibernate:
-            show_sql: false        
-
-springdoc:
-    api-docs:
-        path: /api-docs
+            show_sql: false
