@@ -10,6 +10,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,7 +35,7 @@ public class CiudadanoControlador extends BaseControlador<Ciudadano, String> {
 	private CiudadanoServicio servicio;
 
 	@GetMapping("/cedula/{cedula}")
-	public ResponseEntity<RespuestaTo<Ciudadano>> buscarPorCedula(String cedula) {
+	public ResponseEntity<RespuestaTo<Ciudadano>> buscarPorCedula(@PathVariable String cedula) {
 		try {
 			return new ResponseEntity<>(new RespuestaTo<>(EstadoRespuestaEnum.OK, null, servicio.buscarPorId(cedula)),
 					HttpStatus.OK);

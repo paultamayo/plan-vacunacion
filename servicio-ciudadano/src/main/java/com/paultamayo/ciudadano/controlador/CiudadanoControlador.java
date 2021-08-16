@@ -13,6 +13,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -29,7 +30,7 @@ import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-@RestController("Ciudadano")
+@RestController
 public class CiudadanoControlador {
 
 	@Getter(value = AccessLevel.PROTECTED)
@@ -37,7 +38,7 @@ public class CiudadanoControlador {
 	private CiudadanoServicio servicio;
 
 	@GetMapping("/cedula/{cedula}")
-	public ResponseEntity<RespuestaTo<Ciudadano>> buscarPorCedula(String cedula) {
+	public ResponseEntity<RespuestaTo<Ciudadano>> buscarPorCedula(@PathVariable String cedula) {
 		try {
 			return new ResponseEntity<>(new RespuestaTo<>(EstadoRespuestaEnum.OK, null, servicio.buscarPorId(cedula)),
 					HttpStatus.OK);
@@ -58,7 +59,7 @@ public class CiudadanoControlador {
 			return responderError(ex);
 		}
 	}
-	
+
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public RespuestaTo<Map<String, String>> manejadorExcepcion(MethodArgumentNotValidException ex) {
