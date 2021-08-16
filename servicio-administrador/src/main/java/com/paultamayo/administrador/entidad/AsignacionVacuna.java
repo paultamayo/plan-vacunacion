@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.paultamayo.administrador.entidad.ids.AsignacionVacunaID;
 
 import lombok.Data;
@@ -23,6 +24,7 @@ public class AsignacionVacuna {
 
 	private LocalDate fechaProgramada;
 
+	@JsonIgnore
 	private LocalDateTime fechaRegistro;
 
 	@Id

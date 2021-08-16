@@ -1,5 +1,7 @@
 package com.paultamayo.administrador.repositorio;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
@@ -16,4 +18,6 @@ public interface AsignacionVacunaRepositorio extends CrudRepository<AsignacionVa
 			+ "where fecha_programada\\:\\:date = (select max(fecha_programada\\:\\:date) from asignacion_vacuna av) "
 			+ "group by fecha_programada\\:\\:date;", nativeQuery = true)
 	Optional<Object[]> buscarAsignacion();
+	
+	List<AsignacionVacuna> findByFechaProgramadaBetween(LocalDate fechaInicio, LocalDate fechaFin);
 }

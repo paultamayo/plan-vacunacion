@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,11 @@ public class AsignacionVacunaServicio extends BaseServicio<AsignacionVacuna, Asi
 		}
 
 		return asignacion;
+	}
+	
+	@Transactional(propagation = Propagation.NOT_SUPPORTED)
+	public List<AsignacionVacuna> buscarPorFechaProgramada(LocalDate fechaInicio, LocalDate fechaFin){
+		return repositorio.findByFechaProgramadaBetween(fechaInicio, fechaFin);
 	}
 
 }
