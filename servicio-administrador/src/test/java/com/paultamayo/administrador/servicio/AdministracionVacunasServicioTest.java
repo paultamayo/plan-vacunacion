@@ -15,7 +15,6 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.paultamayo.administrador.entidad.AsignacionVacuna;
@@ -37,9 +36,6 @@ class AdministracionVacunasServicioTest {
 
 	@Mock
 	private AsignacionVacunaServicio asignacionServicio;
-
-	@Autowired
-	private CiudadanoServicio ciudadanoServicio;
 
 	@Mock
 	private ParametrizacionEdadPesoServicio edadServicio;
