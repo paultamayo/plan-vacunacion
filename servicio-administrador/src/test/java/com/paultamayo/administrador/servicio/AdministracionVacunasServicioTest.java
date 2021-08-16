@@ -57,6 +57,8 @@ class AdministracionVacunasServicioTest {
 
 	@Test
 	void asignarVacunas() throws LogicaServicioExcepcion {
+		String correoElectronico = "mail@gmail.com";
+
 		AsignacionVacuna asignacion = new AsignacionVacuna();
 		AsignacionFechaTo asignacionFecha = new AsignacionFechaTo(3, LocalDate.of(2021, Month.AUGUST, 1));
 		when(asignacionServicio.guardar(Mockito.any())).thenReturn(asignacion);
@@ -69,31 +71,31 @@ class AdministracionVacunasServicioTest {
 
 		LocalDate fechaNacimientoHoy = LocalDate.now();
 
-		CiudadanoTo c0 = new CiudadanoTo("0000000000", fechaNacimientoHoy.minusYears(15), 1l, 3l);
+		CiudadanoTo c0 = new CiudadanoTo("0000000000", correoElectronico, fechaNacimientoHoy.minusYears(15), 1l, 3l);
 		CiudadanoTo a0 = administracion.asignarPesoVacunas(c0);
 		assertThat(a0.getPeso()).isEqualTo(-1);
 		assertThat(a0.isAsignado()).isFalse();
 		assertThat(a0.getVacunasId()).isNull();
 
-		CiudadanoTo c1 = new CiudadanoTo("0000000001", fechaNacimientoHoy.minusYears(23), 2l, 3l);
+		CiudadanoTo c1 = new CiudadanoTo("0000000001", correoElectronico, fechaNacimientoHoy.minusYears(23), 2l, 3l);
 		CiudadanoTo a1 = administracion.asignarPesoVacunas(c1);
 		assertThat(a1.getPeso()).isEqualTo(5);
 		assertThat(a1.getVacunasId()).contains(1l, 2l);
 		assertThat(a1.isAsignado()).isTrue();
 
-		CiudadanoTo c2 = new CiudadanoTo("0000000002", fechaNacimientoHoy.minusYears(35), 3l, 2l);
+		CiudadanoTo c2 = new CiudadanoTo("0000000002", correoElectronico, fechaNacimientoHoy.minusYears(35), 3l, 2l);
 		CiudadanoTo a2 = administracion.asignarPesoVacunas(c2);
 		assertThat(a2.getPeso()).isEqualTo(5);
 		assertThat(a2.getVacunasId()).contains(2l, 3l);
 		assertThat(a2.isAsignado()).isTrue();
 
-		CiudadanoTo c3 = new CiudadanoTo("0000000003", fechaNacimientoHoy.minusYears(48), 4l, 1l);
+		CiudadanoTo c3 = new CiudadanoTo("0000000003", correoElectronico, fechaNacimientoHoy.minusYears(48), 4l, 1l);
 		CiudadanoTo a3 = administracion.asignarPesoVacunas(c3);
 		assertThat(a3.getPeso()).isEqualTo(5);
 		assertThat(a3.getVacunasId()).contains(3l, 4l);
 		assertThat(a3.isAsignado()).isTrue();
 
-		CiudadanoTo c4 = new CiudadanoTo("0000000004", fechaNacimientoHoy.minusYears(68), 5l, 3l);
+		CiudadanoTo c4 = new CiudadanoTo("0000000004", correoElectronico, fechaNacimientoHoy.minusYears(68), 5l, 3l);
 		CiudadanoTo a4 = administracion.asignarPesoVacunas(c4);
 		assertThat(a4.getPeso()).isEqualTo(2);
 		assertThat(a4.getVacunasId()).contains(5l);

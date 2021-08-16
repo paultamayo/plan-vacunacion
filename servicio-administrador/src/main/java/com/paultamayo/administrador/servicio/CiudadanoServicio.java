@@ -33,7 +33,8 @@ public class CiudadanoServicio extends BaseServicio<Ciudadano, String> {
 		List<CiudadanoTo> ciudadanosTo = Lists.newArrayListWithCapacity(ciudadanos.size());
 		long i = 1;
 		for (Ciudadano c : ciudadanos) {
-			ciudadanosTo.add(new CiudadanoTo(c.getCedula(), c.getFechaNacimiento(), i++, c.getTipoEnfermedadId()));
+			ciudadanosTo.add(new CiudadanoTo(c.getCedula(), c.getCorreoElectronico(), c.getFechaNacimiento(), i++,
+					c.getTipoEnfermedadId()));
 		}
 
 		return ciudadanosTo;
@@ -43,7 +44,5 @@ public class CiudadanoServicio extends BaseServicio<Ciudadano, String> {
 	public void actualizar(String cedula, EstadoCiudadanoEnum estado) {
 		repositorio.actualizar(cedula, estado);
 	}
-	
-	
 
 }

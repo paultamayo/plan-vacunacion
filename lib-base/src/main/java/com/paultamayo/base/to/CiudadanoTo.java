@@ -21,6 +21,9 @@ public class CiudadanoTo implements Serializable {
 
 	@NonNull
 	private String cedula;
+	
+	@NonNull
+	private String correoElectronico;
 
 	@NonNull
 	private LocalDate fechaNacimiento;

@@ -12,6 +12,9 @@ import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +36,9 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 @Service
 public class AdministracionVacunasServicio {
+
+	@Autowired
+	private JavaMailSender javaMailSender;
 
 	@Autowired
 	private AsignacionVacunaServicio asignacionVacunaServicio;
@@ -145,6 +151,7 @@ public class AdministracionVacunasServicio {
 			asignacionVacunaServicio.guardarRequerida(asignacion);
 
 			ciudadano.setProgramado(true);
+			enviarCorreo(ciudadano.getCorreoElectronico(), fechaProgramada);
 		} catch (Exception ex) {
 			Throwable root = ExceptionUtils.getRootCause(ex);
 			ciudadano.setMensajeError(root.getMessage());
@@ -158,6 +165,21 @@ public class AdministracionVacunasServicio {
 			edadPesos = edadPesoServicio.buscarPorActivo(ActivoEnum.SI);
 			edadVacunas = edadVacunaServicio.buscarPorActivo(ActivoEnum.SI);
 			tipoEnfermedades = Lists.newArrayList(tipoEnfermedadServicio.buscarTodos());
+		} catch (Exception ex) {
+			Throwable root = ExceptionUtils.getRootCause(ex);
+			log.error(root.getMessage(), root);
+		}
+	}
+
+	@Async
+	public void enviarCorreo(String correoElectronico, LocalDate fecha) {
+		try {
+			SimpleMailMessage message = new SimpleMailMessage();
+			message.setTo(correoElectronico);
+			message.setSubject("ASIGNACIóN DE VACUNA");
+			message.setText(String.format("Se le asignado para el día %s.", fecha));
+
+			javaMailSender.send(message);
 		} catch (Exception ex) {
 			Throwable root = ExceptionUtils.getRootCause(ex);
 			log.error(root.getMessage(), root);
